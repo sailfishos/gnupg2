@@ -1,0 +1,27 @@
+From 615c1f037bfd3dbc8e748e5cb8b9c9fce354f07c Mon Sep 17 00:00:00 2001
+Message-Id: <615c1f037bfd3dbc8e748e5cb8b9c9fce354f07c.1283230685.git.yan.i.li@intel.com>
+From: Yan Li <yan.i.li@intel.com>
+Date: Tue, 31 Aug 2010 12:56:49 +0800
+Subject: [PATCH] CVE-2010-2547 Remote attack to cause DoS or arbitrary code execution via crafted certificate (BMC#5114)
+
+
+Signed-off-by: Yan Li <yan.i.li@intel.com>
+---
+ kbx/keybox-blob.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/kbx/keybox-blob.c b/kbx/keybox-blob.c
+index 0aa2a0e..c1b7730 100644
+--- a/kbx/keybox-blob.c
++++ b/kbx/keybox-blob.c
+@@ -887,6 +887,7 @@ _keybox_create_x509_blob (KEYBOXBLOB *r_blob, ksba_cert_t cert,
+               rc = gpg_error (gpg_err_code_from_errno (errno));
+               goto leave;
+             }
++          names = tmp;
+         }
+       names[blob->nuids++] = p;
+       if (!i && (p=x509_email_kludge (p)))
+-- 
+1.7.1
+

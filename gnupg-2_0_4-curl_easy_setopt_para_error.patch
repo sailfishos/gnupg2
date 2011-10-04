@@ -1,0 +1,20 @@
+This patch fixed a parameter error when calling
+curl_easy_setopt(). GCC doesn't allow using typeof() on bit fields
+now.
+
+Written by Yan Li under the instruction of Yang Yi <yi.y.yang@intel.com>.
+
+Signed-off-by: Yan Li <yan.i.li@intel.com>
+---
+diff -Nur gnupg-2.0.4.orig/keyserver/gpgkeys_curl.c gnupg-2.0.4/keyserver/gpgkeys_curl.c
+--- gnupg-2.0.4.orig/keyserver/gpgkeys_curl.c	2007-03-19 21:49:36.000000000 +0800
++++ gnupg-2.0.4/keyserver/gpgkeys_curl.c	2010-07-09 12:00:35.000000000 +0800
+@@ -302,7 +302,7 @@
+       curl_easy_setopt(curl,CURLOPT_VERBOSE,1);
+     }
+ 
+-  curl_easy_setopt(curl,CURLOPT_SSL_VERIFYPEER,opt->flags.check_cert);
++  curl_easy_setopt(curl,CURLOPT_SSL_VERIFYPEER,(unsigned int)opt->flags.check_cert);
+   curl_easy_setopt(curl,CURLOPT_CAINFO,opt->ca_cert_file);
+ 
+   if(proxy)
