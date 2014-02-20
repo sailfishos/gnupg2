@@ -11,6 +11,7 @@ Sources:
 Patches:
     - gnupg-2_0_4-curl_easy_setopt_para_error.patch
     - gnupg_bmc5114_cve_2010_2547.patch
+    - gnupg-2.0.4-aarch64.patch
 Description: |
     GnuPG is GNU's tool for secure communication and data storage.  It can
     be used to encrypt data and to create digital signatures.  It includes

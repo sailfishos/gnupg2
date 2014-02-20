@@ -17,6 +17,7 @@ Source0:    ftp://ftp.gnupg.org/gcrypt/gnupg/gnupg-%{version}.tar.bz2
 Source100:  gnupg2.yaml
 Patch0:     gnupg-2_0_4-curl_easy_setopt_para_error.patch
 Patch1:     gnupg_bmc5114_cve_2010_2547.patch
+Patch2:     gnupg-2.0.4-aarch64.patch
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libusb)
 BuildRequires:  pkgconfig(libgcrypt)
@@ -61,6 +62,8 @@ dependency on other modules at run and build time.
 %patch0 -p1
 # gnupg_bmc5114_cve_2010_2547.patch
 %patch1 -p1
+# gnupg-2.0.4-aarch64.patch
+%patch2 -p1
 # >> setup
 # << setup
 
