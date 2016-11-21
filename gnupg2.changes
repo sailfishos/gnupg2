@@ -1,3 +1,6 @@
+* Fri Nov 18 2016 Andrew Branson <andrew.branson@jollamobile.com> - 2.0.4-2
+- Use autoreconf instead of patch for aarch64 support. Drop yaml. Contributes JB#36790
+
 * Thu Feb 20 2014 Oleg Girko <oleg.girko@jolla.com> - 2.0.4
 - Add aarch64 support
 
