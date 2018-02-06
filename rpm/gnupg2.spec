@@ -1,7 +1,7 @@
 Name:       gnupg2
 Summary:    Utility for secure communication and data storage
 Version:    2.0.4
-Release:    2
+Release:    3
 Epoch:      1
 Group:      Applications/System
 License:    GPLv2+
@@ -9,6 +9,7 @@ URL:        git://git.gnupg.org/gnupg.git
 Source0:    %{name}-%{version}.tar.bz2
 Patch0:     gnupg-2_0_4-curl_easy_setopt_para_error.patch
 Patch1:     gnupg_bmc5114_cve_2010_2547.patch
+Patch2:     gnupg_sexp_nth_mpi.patch
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libusb)
 BuildRequires:  pkgconfig(libgcrypt)
@@ -56,6 +57,8 @@ Documentation package for GnuPG.
 %patch0 -p1
 # gnupg_bmc5114_cve_2010_2547.patch
 %patch1 -p1
+# gnupg_sexp_nth_mpi.patch
+%patch2 -p1
 
 %build
 autoreconf -vfi
