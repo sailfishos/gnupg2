@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(libgcrypt)
 BuildRequires:  pkgconfig(ncurses)
 BuildRequires:  bzip2-devel
 BuildRequires:  gettext
+BuildRequires:  automake
 BuildRequires:  libassuan-devel >= 1.0.4
 BuildRequires:  libgpg-error-devel
 BuildRequires:  libksba-devel
