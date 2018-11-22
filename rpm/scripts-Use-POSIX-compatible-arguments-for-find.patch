@@ -1,0 +1,27 @@
+From 709ade124add0c3c0d0d586e523ccb721bce17c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tomi=20Lepp=C3=A4nen?= <tomi.leppanen@jolla.com>
+Date: Thu, 22 Nov 2018 15:10:46 +0200
+Subject: [PATCH] scripts: Use POSIX compatible arguments for find
+
+Some versions of find do not support -or or -not arguments but use -o
+and ! arguments instead.
+---
+ tools/addgnupghome | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/addgnupghome b/tools/addgnupghome
+index fb032b674..107e195e9 100755
+--- a/tools/addgnupghome
++++ b/tools/addgnupghome
+@@ -107,7 +107,7 @@ if [ ! -d /etc/skel/.gnupg ]; then
+     exit 1
+ fi
+ cd "/etc/skel/.gnupg" || (error "error cd-ing to \`/etc/skel/.gnupg'"; exit 1)
+-filelist=$(find . \( -type f -or -type d \) -not -name '*~' -not -name . -print)
++filelist=$(find . \( -type f -o -type d \) '!' -name '*~' '!' -name . -print)
+ 
+ 
+ if ! umask 0077 ; then
+-- 
+2.19.1
+
