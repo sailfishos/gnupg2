@@ -10,6 +10,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Patch0:     gnupg-2_0_4-curl_easy_setopt_para_error.patch
 Patch1:     gnupg_bmc5114_cve_2010_2547.patch
 Patch2:     gnupg_sexp_nth_mpi.patch
+Patch3:     scripts-Use-POSIX-compatible-arguments-for-find.patch
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libusb)
 BuildRequires:  pkgconfig(libgcrypt)
@@ -60,6 +61,8 @@ Documentation package for GnuPG.
 %patch1 -p1
 # gnupg_sexp_nth_mpi.patch
 %patch2 -p1
+# scripts-Use-POSIX-compatible-arguments-for-find.patch
+%patch3 -p1
 
 %build
 autoreconf -vfi
