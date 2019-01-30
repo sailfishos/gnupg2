@@ -22,7 +22,6 @@ BuildRequires:  libassuan-devel >= 1.0.4
 BuildRequires:  libgpg-error-devel
 BuildRequires:  libksba-devel
 BuildRequires:  pth-devel
-BuildRequires:  readline-devel
 BuildRequires:  zlib-devel
 
 
@@ -67,7 +66,8 @@ Documentation package for GnuPG.
 %build
 autoreconf -vfi
 %configure --disable-static \
-    --disable-doc
+    --disable-doc \
+    --without-readline
 make %{?_smp_mflags}
 
 %install
