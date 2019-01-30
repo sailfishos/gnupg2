@@ -73,12 +73,15 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 %make_install 
+mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
+install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} \
+        AUTHORS ChangeLog NEWS README THANKS TODO
 
 %find_lang gnupg2
 
 %files -f gnupg2.lang
 %defattr(-,root,root,-)
-%doc COPYING
+%license COPYING
 %{_bindir}/gpg2
 %{_bindir}/gpgv2
 %{_bindir}/gpg-connect-agent
@@ -95,4 +98,4 @@ rm -rf %{buildroot}
 %{_libexecdir}/*
 
 %files doc
-%doc AUTHORS ChangeLog NEWS README THANKS TODO
+%{_docdir}/%{name}-%{version}
