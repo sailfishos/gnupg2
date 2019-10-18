@@ -1,0 +1,178 @@
+From f3c1599dbc011efa656fce69ee019a9dbb645ec1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Juho=20H=C3=A4m=C3=A4l=C3=A4inen?=
+ <juho.hamalainen@jolla.com>
+Date: Fri, 18 Oct 2019 12:44:21 +0300
+Subject: [PATCH] gnupg2: Don't use deprecated debug macros.
+
+libgcrypt 1.3 introduced new debugging functions which should be used
+instead of the macros. libgcrypt 1.6 dropped the deprecated macros so
+use new function in preparation for libgcrypt update.
+---
+ g10/cipher.c    | 2 +-
+ g10/encr-data.c | 2 +-
+ g10/mainproc.c  | 8 ++++----
+ g10/sign.c      | 6 +++---
+ sm/certcheck.c  | 2 +-
+ sm/certreqgen.c | 2 +-
+ sm/sign.c       | 4 ++--
+ sm/verify.c     | 4 ++--
+ 8 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/g10/cipher.c b/g10/cipher.c
+index 802c01905..f91e6549e 100644
+--- a/g10/cipher.c
++++ b/g10/cipher.c
+@@ -63,7 +63,7 @@ write_header( cipher_filter_context_t *cfx, IOBUF a )
+ 	ed.mdc_method = DIGEST_ALGO_SHA1;
+ 	gcry_md_open (&cfx->mdc_hash, DIGEST_ALGO_SHA1, 0);
+ 	if ( DBG_HASHING )
+-	    gcry_md_start_debug (cfx->mdc_hash, "creatmdc");
++	    gcry_md_debug (cfx->mdc_hash, "creatmdc");
+     }
+ 
+     {
+diff --git a/g10/encr-data.c b/g10/encr-data.c
+index 851233cde..a10fedb02 100644
+--- a/g10/encr-data.c
++++ b/g10/encr-data.c
+@@ -111,7 +111,7 @@ decrypt_data( void *procctx, PKT_encrypted *ed, DEK *dek )
+       if (gcry_md_open (&dfx->mdc_hash, ed->mdc_method, 0 ))
+         BUG ();
+       if ( DBG_HASHING )
+-        gcry_md_start_debug (dfx->mdc_hash, "checkmdc");
++        gcry_md_debug (dfx->mdc_hash, "checkmdc");
+     }
+ 
+   rc = gcry_cipher_open (&dfx->cipher_hd, dek->algo,
+diff --git a/g10/mainproc.c b/g10/mainproc.c
+index 4e76ab34d..7d3af44af 100644
+--- a/g10/mainproc.c
++++ b/g10/mainproc.c
+@@ -685,9 +685,9 @@ proc_plaintext( CTX c, PACKET *pkt )
+         BUG ();
+     }
+     if ( DBG_HASHING ) {
+-	gcry_md_start_debug ( c->mfx.md, "verify" );
++	gcry_md_debug ( c->mfx.md, "verify" );
+ 	if ( c->mfx.md2  )
+-	    gcry_md_start_debug ( c->mfx.md2, "verify2" );
++	    gcry_md_debug ( c->mfx.md2, "verify2" );
+     }
+ 
+     rc=0;
+@@ -2125,9 +2125,9 @@ proc_tree( CTX c, KBNODE node )
+ 		    /*	c->mfx.md2? 0 :(sig->sig_class == 0x01) */
+ #endif
+             if ( DBG_HASHING ) {
+-                gcry_md_start_debug( c->mfx.md, "verify" );
++                gcry_md_debug( c->mfx.md, "verify" );
+                 if ( c->mfx.md2  )
+-                    gcry_md_start_debug( c->mfx.md2, "verify2" );
++                    gcry_md_debug( c->mfx.md2, "verify2" );
+             }
+ 	    if( c->sigs_only ) {
+                 if (c->signed_data.used && c->signed_data.data_fd != -1)
+diff --git a/g10/sign.c b/g10/sign.c
+index 062fa9f48..9fab0b256 100644
+--- a/g10/sign.c
++++ b/g10/sign.c
+@@ -848,7 +848,7 @@ sign_file( strlist_t filenames, int detached, strlist_t locusr,
+     if ( gcry_md_open (&mfx.md, 0, 0) )
+       BUG ();
+     if (DBG_HASHING)
+-      gcry_md_start_debug (mfx.md, "sign");
++      gcry_md_debug (mfx.md, "sign");
+ 
+     /* If we're encrypting and signing, it is reasonable to pick the
+        hash algorithm to use out of the recepient key prefs.  This is
+@@ -1197,7 +1197,7 @@ clearsign_file( const char *fname, strlist_t locusr, const char *outfile )
+ 	gcry_md_enable (textmd, hash_for(sk));
+     }
+     if ( DBG_HASHING )
+-      gcry_md_start_debug ( textmd, "clearsign" );
++      gcry_md_debug ( textmd, "clearsign" );
+ 
+     copy_clearsig_text( out, inp, textmd, !opt.not_dash_escaped,
+ 			opt.escape_from, (old_style && only_md5) );
+@@ -1319,7 +1319,7 @@ sign_symencrypt_file (const char *fname, strlist_t locusr)
+     if ( gcry_md_open (&mfx.md, 0, 0) )
+       BUG ();
+     if ( DBG_HASHING )
+-      gcry_md_start_debug (mfx.md, "symc-sign");
++      gcry_md_debug (mfx.md, "symc-sign");
+ 
+     for (sk_rover = sk_list; sk_rover; sk_rover = sk_rover->next) {
+ 	PKT_secret_key *sk = sk_rover->sk;
+diff --git a/sm/certcheck.c b/sm/certcheck.c
+index 0a362d3fb..d0ee6d47f 100644
+--- a/sm/certcheck.c
++++ b/sm/certcheck.c
+@@ -257,7 +257,7 @@ gpgsm_check_cert_sig (ksba_cert_t issuer_cert, ksba_cert_t cert)
+       return rc;
+     }
+   if (DBG_HASHING)
+-    gcry_md_start_debug (md, "hash.cert");
++    gcry_md_debug (md, "hash.cert");
+ 
+   rc = ksba_cert_hash (cert, 1, HASH_FNC, md);
+   if (rc)
+diff --git a/sm/certreqgen.c b/sm/certreqgen.c
+index 043e218c4..0245eb8ae 100644
+--- a/sm/certreqgen.c
++++ b/sm/certreqgen.c
+@@ -620,7 +620,7 @@ create_request (ctrl_t ctrl,
+       goto leave;
+     }
+   if (DBG_HASHING)
+-    gcry_md_start_debug (md, "cr.cri");
++    gcry_md_debug (md, "cr.cri");
+ 
+   ksba_certreq_set_hash_function (cr, HASH_FNC, md);
+   ksba_certreq_set_writer (cr, outctrl->writer);
+diff --git a/sm/sign.c b/sm/sign.c
+index 03ce6a754..47892fb5d 100644
+--- a/sm/sign.c
++++ b/sm/sign.c
+@@ -468,7 +468,7 @@ gpgsm_sign (ctrl_t ctrl, certlist_t signerlist,
+       goto leave;
+     }
+   if (DBG_HASHING)
+-    gcry_md_start_debug (data_md, "sign.data");
++    gcry_md_debug (data_md, "sign.data");
+ 
+   for (i=0; (algoid=ksba_cms_get_digest_algo_list (cms, i)); i++)
+     {
+@@ -608,7 +608,7 @@ gpgsm_sign (ctrl_t ctrl, certlist_t signerlist,
+               goto leave;
+             }
+           if (DBG_HASHING)
+-            gcry_md_start_debug (md, "sign.attr");
++            gcry_md_debug (md, "sign.attr");
+           ksba_cms_set_hash_function (cms, HASH_FNC, md);
+           for (cl=signerlist,signer=0; cl; cl = cl->next, signer++)
+             {
+diff --git a/sm/verify.c b/sm/verify.c
+index ae17d21f3..3c93dabd9 100644
+--- a/sm/verify.c
++++ b/sm/verify.c
+@@ -154,7 +154,7 @@ gpgsm_verify (ctrl_t ctrl, int in_fd, int data_fd, FILE *out_fp)
+       goto leave;
+     }
+   if (DBG_HASHING)
+-    gcry_md_start_debug (data_md, "vrfy.data");
++    gcry_md_debug (data_md, "vrfy.data");
+ 
+   is_detached = 0;
+   do 
+@@ -423,7 +423,7 @@ gpgsm_verify (ctrl_t ctrl, int in_fd, int data_fd, FILE *out_fp)
+               goto next_signer;
+             }
+           if (DBG_HASHING)
+-            gcry_md_start_debug (md, "vrfy.attr");
++            gcry_md_debug (md, "vrfy.attr");
+ 
+           ksba_cms_set_hash_function (cms, HASH_FNC, md);
+           rc = ksba_cms_hash_signed_attrs (cms, signer);
+-- 
+2.20.1
+
