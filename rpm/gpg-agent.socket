@@ -1,0 +1,12 @@
+[Unit]
+Description=GnuPG agent
+ConditionUser=!root
+
+[Socket]
+ListenStream=%h/.gnupg/S.gpg-agent
+FileDescriptorName=std
+SocketMode=0600
+
+[Install]
+WantedBy=sockets.target
+
