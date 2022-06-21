@@ -3,7 +3,6 @@ Summary:    Utility for secure communication and data storage
 Version:    2.0.4
 Release:    3
 Epoch:      1
-Group:      Applications/System
 License:    GPLv2+
 URL:        https://github.com/sailfishos/gnupg2
 Source0:    %{name}-%{version}.tar.bz2
