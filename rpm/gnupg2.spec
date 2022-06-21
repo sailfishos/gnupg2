@@ -5,7 +5,7 @@ Release:    3
 Epoch:      1
 Group:      Applications/System
 License:    GPLv2+
-URL:        git://git.gnupg.org/gnupg.git
+URL:        https://github.com/sailfishos/gnupg2
 Source0:    %{name}-%{version}.tar.bz2
 Patch0:     gnupg-2_0_4-curl_easy_setopt_para_error.patch
 Patch1:     gnupg_bmc5114_cve_2010_2547.patch
