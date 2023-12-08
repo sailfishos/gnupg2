@@ -70,7 +70,10 @@ autoreconf -vfi
 %configure --disable-static \
     --disable-doc \
     --without-readline
-make %{?_smp_mflags}
+
+# Remove -fcommon after package updated to a new enough version.
+# Used for allowing uninitialized global variables in a common block.
+%make_build CFLAGS="-fcommon $RPM_OPT_FLAGS"
 
 %install
 rm -rf %{buildroot}
