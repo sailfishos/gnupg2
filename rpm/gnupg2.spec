@@ -6,6 +6,9 @@ Epoch:      1
 License:    GPLv2+
 URL:        https://github.com/sailfishos/gnupg2
 Source0:    %{name}-%{version}.tar.bz2
+Source1:    gpg-agent.socket
+Source2:    gpg-agent.service
+Source3:    90-gpg-agent.conf
 Patch0:     gnupg-2_0_4-curl_easy_setopt_para_error.patch
 Patch1:     gnupg_bmc5114_cve_2010_2547.patch
 Patch2:     gnupg_sexp_nth_mpi.patch
@@ -15,6 +18,7 @@ BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libusb)
 BuildRequires:  pkgconfig(libgcrypt)
 BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(systemd)
 BuildRequires:  bzip2-devel
 BuildRequires:  gettext
 BuildRequires:  automake
@@ -23,7 +27,8 @@ BuildRequires:  libgpg-error-devel
 BuildRequires:  libksba-devel
 BuildRequires:  pth-devel
 BuildRequires:  zlib-devel
-
+Requires:       systemd
+%{?systemd_requires}
 
 %description
 GnuPG is GNU's tool for secure communication and data storage.  It can
@@ -81,6 +86,11 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} \
         AUTHORS ChangeLog NEWS README THANKS TODO
+mkdir -p %{buildroot}%{_userunitdir}
+install -m 644 %{SOURCE1} %{buildroot}%{_userunitdir}
+install -m 644 %{SOURCE2} %{buildroot}%{_userunitdir}
+mkdir -p %{buildroot}%{_sharedstatedir}/environment/nemo
+install -m 644 %{SOURCE3} %{buildroot}%{_sharedstatedir}/environment/nemo
 
 %find_lang gnupg2
 
@@ -101,6 +111,8 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} \
 %{_sbindir}/*
 %{_datadir}/gnupg/
 %{_libexecdir}/*
+%{_userunitdir}/gpg-agent.*
+%{_sharedstatedir}/environment/nemo/*.conf
 
 %files doc
 %{_docdir}/%{name}-%{version}
