@@ -11,6 +11,7 @@ Patch1:     gnupg_bmc5114_cve_2010_2547.patch
 Patch2:     gnupg_sexp_nth_mpi.patch
 Patch3:     scripts-Use-POSIX-compatible-arguments-for-find.patch
 Patch4:     gnupg2-Don-t-use-deprecated-debug-macros.patch
+Patch5:     gnupg2-Fix-build-with-gcc-15.patch
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libusb)
 BuildRequires:  pkgconfig(libgcrypt)
