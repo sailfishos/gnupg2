@@ -52,18 +52,7 @@ Summary: Documentation package for GnuPG.
 Documentation package for GnuPG.
 
 %prep
-%setup -q -n %{name}-%{version}/%{name}
-
-# gnupg-2_0_4-curl_easy_setopt_para_error.patch
-%patch0 -p1
-# gnupg_bmc5114_cve_2010_2547.patch
-%patch1 -p1
-# gnupg_sexp_nth_mpi.patch
-%patch2 -p1
-# scripts-Use-POSIX-compatible-arguments-for-find.patch
-%patch3 -p1
-# gnupg2-Don-t-use-deprecated-debug-macros.patch
-%patch4 -p1
+%autosetup -p1 -n %{name}-%{version}/%{name}
 
 %build
 autoreconf -vfi
@@ -76,7 +65,6 @@ autoreconf -vfi
 %make_build CFLAGS="-fcommon $RPM_OPT_FLAGS"
 
 %install
-rm -rf %{buildroot}
 %make_install 
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} \
@@ -85,7 +73,6 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} \
 %find_lang gnupg2
 
 %files -f gnupg2.lang
-%defattr(-,root,root,-)
 %license COPYING
 %{_bindir}/gpg2
 %{_bindir}/gpgv2
