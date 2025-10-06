@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@jolla.com>
+Date: Sat, 4 Oct 2025 23:28:12 +0300
+Subject: [PATCH] Fix build with gcc 15
+
+---
+ g10/status.c   | 6 +++---
+ tests/asschk.c | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/g10/status.c b/g10/status.c
+index 3e5de6e88c1951fbf796cd211cc41d713c9ab9f5..bd35f050c8f27cf72c57dba9e5461014a2900f28 100644
+--- a/g10/status.c
++++ b/g10/status.c
+@@ -390,7 +390,7 @@ myread(int fd, void *buf, size_t count)
+  * If bool, returns static string on true (do not free) or NULL for false
+  */
+ static char *
+-do_get_from_fd( const char *keyword, int hidden, int bool )
++do_get_from_fd( const char *keyword, int hidden, int getbool )
+ {
+     int i, len;
+     char *string;
+@@ -398,7 +398,7 @@ do_get_from_fd( const char *keyword, int hidden, int bool )
+     if(statusfp!=stdout)
+       fflush(stdout);
+ 
+-    write_status_text( bool? STATUS_GET_BOOL :
++    write_status_text( getbool? STATUS_GET_BOOL :
+ 		       hidden? STATUS_GET_HIDDEN : STATUS_GET_LINE, keyword );
+ 
+     for( string = NULL, i = len = 200; ; i++ ) {
+@@ -425,7 +425,7 @@ do_get_from_fd( const char *keyword, int hidden, int bool )
+ 
+     write_status( STATUS_GOT_IT );
+ 
+-    if( bool )	 /* Fixme: is this correct??? */
++    if( getbool )	 /* Fixme: is this correct??? */
+ 	return (string[0] == 'Y' || string[0] == 'y') ? "" : NULL;
+ 
+     return string;
+diff --git a/tests/asschk.c b/tests/asschk.c
+index 344deca491e5ff8ec149f548c8f545e4ca06a565..9916527a7c4b0754d0a893b0e7ce91669308d3ca 100644
+--- a/tests/asschk.c
++++ b/tests/asschk.c
+@@ -652,13 +652,13 @@ expand_line (char *buffer)
+ static int 
+ eval_boolean (const char *cond)
+ {
+-  int true = 1;
++  int tru = 1;
+ 
+   for ( ; *cond == '!'; cond++)
+-    true = !true;
++    tru = !tru;
+   if (!*cond || (*cond == '0' && !cond[1]))
+-    return !true;
+-  return true;
++    return !tru;
++  return tru;
+ }
+ 
+ 
